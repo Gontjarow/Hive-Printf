@@ -1,0 +1,3 @@
+*.o
+FT_PRINTF
+libftprintf.a

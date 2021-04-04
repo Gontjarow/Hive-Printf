@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_format.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngontjar <niko.gontjarow@gmail.com>        +#+  +:+       +#+        */
+/*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 21:42:32 by ngontjar          #+#    #+#             */
-/*   Updated: 2020/08/13 21:06:26 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/04 02:37:52 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static char	parse_width(const char **format, t_data *flag)
 {
-	char bytes;
+	char	bytes;
 
 	bytes = 0;
 	if (**format == '*')
@@ -39,9 +39,13 @@ static char	parse_width(const char **format, t_data *flag)
 	return (bytes);
 }
 
+/*
+** Note: The while(isdigit) loop contains a branchless ternary.
+** Todo: Find a way to simplify this within 25 lines in a sensible way.
+*/
 static char	parse_precision(const char **format, t_data *flag)
 {
-	char bytes;
+	char	bytes;
 
 	if (**format != '.')
 		return (0);
@@ -49,7 +53,8 @@ static char	parse_precision(const char **format, t_data *flag)
 	if (**format == '*' && ++(*format) && ++bytes)
 	{
 		flag->precision = va_arg(flag->ap, int);
-		flag->precision = (flag->precision < 0 ? -1 : flag->precision);
+		if (flag->precision < 0)
+			flag->precision = -1;
 	}
 	else if (**format != 'f' || **format != 'L')
 	{
@@ -70,8 +75,8 @@ static char	parse_precision(const char **format, t_data *flag)
 
 static char	parse_specifier(const char **format, t_data *flag)
 {
-	char			bytes;
-	size_t			skip;
+	char	bytes;
+	size_t	skip;
 
 	bytes = 0;
 	if (**format == 'h')
@@ -99,7 +104,7 @@ static char	parse_specifier(const char **format, t_data *flag)
 
 static char	parse_flags(const char **format, t_data *flag)
 {
-	int bytes;
+	int	bytes;
 
 	bytes = 0;
 	while (**format == '-'
@@ -123,7 +128,7 @@ static char	parse_flags(const char **format, t_data *flag)
 	return (bytes);
 }
 
-char		parse_format(const char *format, t_data *flag)
+char	parse_format(const char *format, t_data *flag)
 {
 	int		bytes;
 	char	*type;
@@ -134,8 +139,14 @@ char		parse_format(const char *format, t_data *flag)
 	bytes += parse_precision(&format, flag);
 	bytes += parse_specifier(&format, flag);
 	type = ft_strchr("sdfciXxu%op", *format);
-	flag->type = (type ? *type : 0);
-	if (!flag->type)
-		return (0);
+	if (type)
+	{
+		flag->type = *type;
 	return (bytes);
+	}
+	else
+	{
+		flag->type = '\0';
+		return (0);
+	}
 }

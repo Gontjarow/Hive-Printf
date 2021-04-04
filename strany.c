@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   strany.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngontjar <ngontjar@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 20:15:20 by ngontjar          #+#    #+#             */
-/*   Updated: 2020/02/27 17:47:41 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/03 23:51:18 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 
 char	*strany(const char *string, char *specifiers)
 {
-	size_t a;
-	size_t b;
+	size_t	a;
+	size_t	b;
 
 	a = 0;
 	while (string[a])
@@ -29,7 +29,7 @@ char	*strany(const char *string, char *specifiers)
 		while (specifiers[b])
 		{
 			if (string[a] == specifiers[b])
-				return (char *)(&string[a]);
+				return ((char *)(&string[a]));
 			++b;
 		}
 		++a;
@@ -63,7 +63,7 @@ char	*strany_skip(const char *string, char *specifiers)
 			++b;
 		}
 		if (skip == FALSE)
-			return (char *)(&string[a]);
+			return ((char *)(&string[a]));
 		++a;
 	}
 	return (NULL);
@@ -71,13 +71,13 @@ char	*strany_skip(const char *string, char *specifiers)
 
 char	*strchr_skip(const char *string, char specifier)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
 	while (string[i])
 	{
 		if (string[i] != specifier)
-			return (char *)(string + i);
+			return ((char *)(string + i));
 		++i;
 	}
 	return (NULL);

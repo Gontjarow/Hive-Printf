@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngontjar <niko.gontjarow@gmail.com>        +#+  +:+       +#+        */
+/*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 21:07:10 by ngontjar          #+#    #+#             */
-/*   Updated: 2020/08/13 21:37:53 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/04 00:54:25 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-size_t			putstr_case(const char *str, int mode)
+size_t	putstr_case(const char *str, int mode)
 {
 	size_t	i;
 	size_t	length;
@@ -20,46 +20,43 @@ size_t			putstr_case(const char *str, int mode)
 
 	if (mode == 0)
 		return (ft_putstr(str));
-	else
+	if (str == NULL)
+		return (putstr_case("(null)", mode));
+	length = ft_strlen(str);
+	i = 0;
+	while (str[i])
 	{
-		if (str)
-		{
-			length = ft_strlen(str);
-			i = 0;
-			while (str[i])
-			{
-				c = (mode < 0) ? ft_tolower(str[i]) : ft_toupper(str[i]);
-				write(1, &c, 1);
-				++i;
-			}
-		}
+		if (mode < 0)
+			c = ft_tolower(str[i]);
 		else
-			return (putstr_case("(null)", mode));
+			c = ft_toupper(str[i]);
+		write(1, &c, 1);
+		++i;
 	}
 	return (length);
 }
 
-size_t			putstrn_case(const char *str, size_t n, int mode)
+size_t	putstrn_case(const char *str, size_t n, int mode)
 {
 	size_t	i;
 	char	c;
 
-	i = 0;
-	if (str)
-	{
-		while (str[i] && i < n)
-		{
-			c = (mode < 0) ? ft_tolower(str[i]) : ft_toupper(str[i]);
-			write(1, &c, 1);
-			++i;
-		}
-	}
-	else
+	if (str == NULL)
 		return (putstr_case("(null)", mode));
+	i = 0;
+	while (str[i] && i < n)
+	{
+		if (mode < 0)
+			c = ft_tolower(str[i]);
+		else
+			c = ft_toupper(str[i]);
+		write(1, &c, 1);
+		++i;
+	}
 	return (i);
 }
 
-void			width_padder(int w, const char c, t_data *flag)
+void	width_padder(int w, const char c, t_data *flag)
 {
 	while (w > 0)
 	{
@@ -69,7 +66,7 @@ void			width_padder(int w, const char c, t_data *flag)
 	}
 }
 
-char			*ft_utoa(unsigned long long number)
+char	*ft_utoa(unsigned long long number)
 {
 	char				string[20 + 1];
 	unsigned int		length;
@@ -87,7 +84,7 @@ char			*ft_utoa(unsigned long long number)
 	return (ft_strdup(string));
 }
 
-char			*ft_utoa_base(unsigned long long number, int base)
+char	*ft_utoa_base(unsigned long long number, int base)
 {
 	char				string[64 + 1];
 	unsigned int		mod;
@@ -104,7 +101,10 @@ char			*ft_utoa_base(unsigned long long number, int base)
 	while (number)
 	{
 		mod = number % base;
-		string[i++] = (mod > 9 ? 'A' + (mod - 10) : '0' + mod);
+		if (mod >= 10)
+			string[i++] = 'A' + (mod - 10);
+		else
+			string[i++] = '0' + mod;
 		number /= base;
 	}
 	string[i] = '\0';
