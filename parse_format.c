@@ -58,13 +58,12 @@ static char	parse_precision(const char **format, t_data *flag)
 	}
 	else if (**format != 'f' || **format != 'L')
 	{
-		flag->precision = (!ft_isdigit(**format)) ? 0 : flag->precision;
+		flag->precision = 0;
 		while (ft_isdigit(**format))
 		{
-			if (flag->precision == -1)
-				flag->precision = (**format - '0');
-			else
-				flag->precision = (flag->precision * 10) + (**format - '0');
+			flag->precision = ((flag->precision == -1) * (**format - '0'))
+				+ ((flag->precision != -1)
+					* ((flag->precision * 10) + (**format - '0')));
 			++(*format) && ++bytes;
 		}
 	}
@@ -96,8 +95,8 @@ static char	parse_specifier(const char **format, t_data *flag)
 		else
 			flag->specifier = SPECIFIER_L;
 	}
-	if ((skip = (size_t)strany_skip(*format, "hlL")))
-		skip -= (size_t)(*format);
+	skip = (size_t)strany_skip(*format, "hlL");
+	skip -= (skip != 0) * (size_t)(*format);
 	(bytes += skip) && ((*format) += skip);
 	return (bytes);
 }
@@ -142,7 +141,7 @@ char	parse_format(const char *format, t_data *flag)
 	if (type)
 	{
 		flag->type = *type;
-	return (bytes);
+		return (bytes);
 	}
 	else
 	{
