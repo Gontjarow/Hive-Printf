@@ -6,55 +6,43 @@
 /*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:06:59 by ngontjar          #+#    #+#             */
-/*   Updated: 2021/04/05 17:51:14 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/05 21:57:48 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void	init(size_t *len, int *w, t_data *flag)
+static void	init(size_t *len, t_data *flag)
 {
-	if (flag->precision == -1)
+	flag->p = flag->precision;
+	if (flag->precision == -1 || flag->p > *len)
 	{
 		flag->p = *len;
 	}
-	else
-	{
-		flag->p = flag->precision;
-	}
-	if (flag->p > *len)
-	{
-		flag->p = *len;
-	}
+	flag->w = 0;
 	if ((size_t)flag->width > flag->p)
 	{
-		*w = (size_t)flag->width - flag->p;
-	}
-	else
-	{
-		*w = 0;
+		flag->w = (size_t)flag->width - flag->p;
 	}
 }
 
 static void	justify_left(char *arg, t_data *flag)
 {
-	int		w;
 	size_t	len;
 
 	len = ft_strlen(arg);
-	init(&len, &w, flag);
+	init(&len, flag);
 	flag->written += ft_putstrn(arg, flag->p);
-	width_padder(w, ' ', flag);
+	width_padder(flag->w, ' ', flag);
 }
 
 static void	justify_right(char *arg, t_data *flag)
 {
-	int		w;
 	size_t	len;
 
 	len = ft_strlen(arg);
-	init(&len, &w, flag);
-	width_padder(w, ' ', flag);
+	init(&len, flag);
+	width_padder(flag->w, ' ', flag);
 	flag->written += ft_putstrn(arg, flag->p);
 }
 

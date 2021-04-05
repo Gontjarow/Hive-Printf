@@ -6,98 +6,77 @@
 /*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:21:53 by ngontjar          #+#    #+#             */
-/*   Updated: 2021/04/05 17:57:58 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/05 21:27:47 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static void	init(size_t *len, int *prefix, int *w, t_data *flag)
+static void	init_zeros(size_t *len, t_data *flag)
 {
-	if (flag->precision == -1 || flag->precision < (int)(*len))
+	flag->z = 0;
+	if (flag->precision > (int)(*len))
 	{
-		flag->p = *len;
-	}
-	else
-	{
-		flag->p = flag->precision;
-	}
-	if (flag->p > *len)
-	{
-		flag->p = *len;
-	}
-	if ((size_t)flag->width > flag->p)
-	{
-		*w = flag->width - flag->p - *prefix;
-	}
-	else
-	{
-		*w = 0;
+		flag->z = flag->precision - *len;
+		flag->w -= flag->z;
 	}
 }
 
-static void	init_zeros(size_t *len, int *z, int *w, t_data *flag)
+static void	init(size_t *len, int *prefix, t_data *flag)
 {
-	if (flag->precision > (int)(*len))
+	flag->p = flag->precision;
+	if (flag->precision == -1
+		|| flag->precision < (int)(*len)
+		|| flag->p > *len)
 	{
-		*z = flag->precision - *len;
+		flag->p = *len;
 	}
-	else
+	flag->w = 0;
+	if ((size_t)flag->width > flag->p)
 	{
-		*z = 0;
+		flag->w = flag->width - flag->p - *prefix;
 	}
-	if (*z > 0)
-	{
-		*w -= *z;
-	}
+	init_zeros(len, flag);
 }
 
 static void	justify_left(long long arg, const char *str, t_data *flag)
 {
-	int		w;
-	int		z;
 	size_t	len;
 	int		prefix;
 
 	prefix = 2 * (flag->bit & FLAG_PREFIX && arg != 0);
-	if (flag->precision == 0 && arg == 0)
-		len = 0;
-	else
+	len = 0;
+	if (!(flag->precision == 0 && arg == 0))
 		len = ft_strlen(str);
-	init(&len, &prefix, &w, flag);
-	init_zeros(&len, &z, &w, flag);
+	init(&len, &prefix, flag);
 	if (prefix)
 		flag->written += putstr_case("0X", -1 * (flag->type == 'x'));
-	width_padder(z, '0', flag);
+	width_padder(flag->z, '0', flag);
 	flag->written += putstrn_case(str, flag->p, -1 * (flag->type == 'x'));
-	width_padder(w, ' ', flag);
+	width_padder(flag->w, ' ', flag);
 }
 
 static void	justify_right(long long arg, const char *str, t_data *flag)
 {
-	int		w;
-	int		z;
 	size_t	len;
 	int		prefix;
 
 	prefix = 2 * (flag->bit & FLAG_PREFIX && arg != 0);
-	if (flag->precision == 0 && arg == 0)
-		len = 0;
-	else
+	len = 0;
+	if (!(flag->precision == 0 && arg == 0))
 		len = ft_strlen(str);
-	init(&len, &prefix, &w, flag);
-	init_zeros(&len, &z, &w, flag);
+	init(&len, &prefix, flag);
 	if (flag->bit & FLAG_LEADING_ZERO && ~flag->precision)
 		flag->bit &= ~FLAG_LEADING_ZERO;
-	if ((flag->bit & FLAG_LEADING_ZERO) && (w > 0))
+	if ((flag->bit & FLAG_LEADING_ZERO) && (flag->w > 0))
 	{
-		z += w;
-		w = 0;
+		flag->z += flag->w;
+		flag->w = 0;
 	}
-	width_padder(w, ' ', flag);
+	width_padder(flag->w, ' ', flag);
 	if (prefix)
 		flag->written += putstr_case("0X", -1 * (flag->type == 'x'));
-	width_padder(z, '0', flag);
+	width_padder(flag->z, '0', flag);
 	flag->written += putstrn_case(str, flag->p, -1 * (flag->type == 'x'));
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngontjar <niko.gontjarow@gmail.com>        +#+  +:+       +#+        */
+/*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 18:57:36 by ngontjar          #+#    #+#             */
-/*   Updated: 2020/08/13 18:12:33 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/05 20:58:27 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,17 @@
 # define FLAG_PREFIX		0b1000
 # define FLAG_LEADING_ZERO	0b10000
 
+/*
+** Note: Haiku
+**	I don't want these here,
+**	but I have no options left.
+**	Blame Norminette.
+** Note: These are specifically related to the final output.
+** p = output length or "total precision" without padding
+** w = width padding
+** z = zero padding
+*/
+
 typedef struct	s_data
 {
 	va_list	ap;
@@ -39,6 +50,8 @@ typedef struct	s_data
 	char	type;
 	size_t	written;
 	size_t	p;
+	size_t	w;
+	size_t	z;
 }				t_data;
 
 /*
