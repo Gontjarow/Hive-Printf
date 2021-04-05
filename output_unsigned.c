@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_unsigned.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngontjar <niko.gontjarow@gmail.com>        +#+  +:+       +#+        */
+/*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/30 14:51:48 by ngontjar          #+#    #+#             */
-/*   Updated: 2020/08/13 19:13:47 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/05 18:01:27 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ static void	justify_left(long long arg, const char *str, t_data *flag)
 	int		z;
 	size_t	len;
 
-	len = (flag->precision == 0 && arg == 0) ? 0 : ft_strlen(str);
+	if (flag->precision == 0 && arg == 0)
+		len = 0;
+	else
+		len = ft_strlen(str);
 	init(&len, &w, flag);
 	init_zeros(&len, &z, &w, flag);
 	width_padder(z, '0', flag);
@@ -66,7 +69,10 @@ static void	justify_right(long long arg, const char *str, t_data *flag)
 	int		z;
 	size_t	len;
 
-	len = (flag->precision == 0 && arg == 0) ? 0 : (int)ft_strlen(str);
+	if (flag->precision == 0 && arg == 0)
+		len = 0;
+	else
+		len = ft_strlen(str);
 	init(&len, &w, flag);
 	init_zeros(&len, &z, &w, flag);
 	if (flag->bit & FLAG_LEADING_ZERO && ~flag->precision)
@@ -88,9 +94,9 @@ static void	justify_right(long long arg, const char *str, t_data *flag)
 ** If value is zero and precision is exactly zero, print nothing.
 */
 
-void		output_unsigned(unsigned long long arg, t_data *flag)
+void	output_unsigned(unsigned long long arg, t_data *flag)
 {
-	char *str;
+	char	*str;
 
 	str = ft_utoa(arg);
 	if (flag->bit & FLAG_JUSTIFY_LEFT)

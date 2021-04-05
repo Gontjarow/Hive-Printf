@@ -6,7 +6,7 @@
 /*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:06:59 by ngontjar          #+#    #+#             */
-/*   Updated: 2020/08/06 20:49:49 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/05 17:51:14 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	justify_right(char *arg, t_data *flag)
 ** Precision: maximum amount of characters
 */
 
-void		output_str(char *arg, t_data *flag)
+void	output_str(char *arg, t_data *flag)
 {
 	if (flag->bit & FLAG_JUSTIFY_LEFT)
 		justify_left(arg, flag);

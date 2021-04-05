@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_octal.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngontjar <niko.gontjarow@gmail.com>        +#+  +:+       +#+        */
+/*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/30 14:51:20 by ngontjar          #+#    #+#             */
-/*   Updated: 2020/08/13 19:13:20 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/05 17:20:42 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,11 +52,18 @@ static void	justify_left(long long arg, const char *str, t_data *flag)
 	int		prefix;
 
 	prefix = !!(flag->bit & FLAG_PREFIX);
-	len = (flag->precision == 0 && arg == 0) ? 0 : ft_strlen(str);
-	len = (prefix && arg == 0) ? 0 : len;
+	if (flag->precision == 0 && arg == 0)
+		len = 0;
+	else
+		len = ft_strlen(str);
+	if (prefix && arg == 0)
+		len = 0;
 	init(&len, &prefix, &w, flag);
 	init_zeros(&len, &prefix, &z, flag);
-	w = (z > 0) ? w - z : w;
+	if (z > 0)
+		w = w - z;
+	else
+		w = w;
 	if (prefix)
 		flag->written += ft_putstr("0");
 	width_padder(z, '0', flag);
@@ -72,11 +79,20 @@ static void	justify_right(long long arg, const char *str, t_data *flag)
 	int		prefix;
 
 	prefix = !!(flag->bit & FLAG_PREFIX);
-	len = (flag->precision == 0 && arg == 0) ? 0 : ft_strlen(str);
-	len = (prefix && arg == 0) ? 0 : len;
+	if (flag->precision == 0 && arg == 0)
+		len = 0;
+	else
+		len = ft_strlen(str);
+	if (prefix && arg == 0)
+		len = 0;
+	else
+		len = len;
 	init(&len, &prefix, &w, flag);
 	init_zeros(&len, &prefix, &z, flag);
-	w = (z > 0) ? w - z : w;
+	if (z > 0)
+		w = w - z;
+	else
+		w = w;
 	if (flag->bit & FLAG_LEADING_ZERO && ~flag->precision)
 		flag->bit &= ~FLAG_LEADING_ZERO;
 	if ((flag->bit & FLAG_LEADING_ZERO) && (w > 0))
@@ -98,9 +114,9 @@ static void	justify_right(long long arg, const char *str, t_data *flag)
 ** If value is zero and precision is exactly zero, print nothing.
 */
 
-void		output_octal(unsigned long long arg, t_data *flag)
+void	output_octal(unsigned long long arg, t_data *flag)
 {
-	char *str;
+	char	*str;
 
 	str = ft_utoa_base(arg, 8);
 	if (flag->bit & FLAG_JUSTIFY_LEFT)

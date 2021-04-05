@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_uint.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngontjar <niko.gontjarow@gmail.com>        +#+  +:+       +#+        */
+/*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/06 19:21:53 by ngontjar          #+#    #+#             */
-/*   Updated: 2020/08/13 19:14:17 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/05 17:57:58 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ static void	justify_left(long long arg, const char *str, t_data *flag)
 	int		prefix;
 
 	prefix = 2 * (flag->bit & FLAG_PREFIX && arg != 0);
-	len = (flag->precision == 0 && arg == 0) ? 0 : ft_strlen(str);
+	if (flag->precision == 0 && arg == 0)
+		len = 0;
+	else
+		len = ft_strlen(str);
 	init(&len, &prefix, &w, flag);
 	init_zeros(&len, &z, &w, flag);
 	if (prefix)
@@ -78,7 +81,10 @@ static void	justify_right(long long arg, const char *str, t_data *flag)
 	int		prefix;
 
 	prefix = 2 * (flag->bit & FLAG_PREFIX && arg != 0);
-	len = (flag->precision == 0 && arg == 0) ? 0 : (int)ft_strlen(str);
+	if (flag->precision == 0 && arg == 0)
+		len = 0;
+	else
+		len = ft_strlen(str);
 	init(&len, &prefix, &w, flag);
 	init_zeros(&len, &z, &w, flag);
 	if (flag->bit & FLAG_LEADING_ZERO && ~flag->precision)
@@ -102,9 +108,9 @@ static void	justify_right(long long arg, const char *str, t_data *flag)
 ** If value is zero and precision is exactly zero, print nothing.
 */
 
-void		output_uint(unsigned long long arg, t_data *flag)
+void	output_uint(unsigned long long arg, t_data *flag)
 {
-	char *str;
+	char	*str;
 
 	if (flag->type == 'o')
 		output_octal(arg, flag);

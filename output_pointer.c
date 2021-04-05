@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   output_pointer.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ngontjar <niko.gontjarow@gmail.com>        +#+  +:+       +#+        */
+/*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/26 07:48:21 by ngontjar          #+#    #+#             */
-/*   Updated: 2020/08/13 21:37:40 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/05 17:50:59 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ static void	justify_right(const char *str, t_data *flag)
 ** Leading zeroes (after prefix) if necessary.
 */
 
-void		output_pointer(void *arg, t_data *flag)
+void	output_pointer(void *arg, t_data *flag)
 {
 	char	*str;
 

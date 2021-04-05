@@ -6,7 +6,7 @@
 /*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 18:54:29 by ngontjar          #+#    #+#             */
-/*   Updated: 2021/04/03 23:32:14 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/05 11:01:12 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	send_uint(t_data *flag)
 {
 	if (flag->specifier == 0)
 		output_uint(va_arg(flag->ap, unsigned int), flag);
-	if (flag->specifier == SPECIFIER_L)
+	else if (flag->specifier == SPECIFIER_L)
 		output_uint(va_arg(flag->ap, unsigned long int), flag);
 	else if (flag->specifier == SPECIFIER_LL)
 		output_uint(va_arg(flag->ap, unsigned long long int), flag);

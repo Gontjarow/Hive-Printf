@@ -6,7 +6,7 @@
 /*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/08/04 18:52:28 by ngontjar          #+#    #+#             */
-/*   Updated: 2020/08/22 23:33:53 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/05 18:14:19 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@
 **          to pad to the field width rather than performing space padding,
 **          except when converting an infinity or NaN.
 ** Note: If the 0 and - flags both appear, the 0 flag is ignored.
+*/
+
+/*
+** w = width padder (space character)
+** z = zero (digit character)
 */
 
 #include "ft_printf.h"
@@ -116,10 +121,10 @@ static void	justify_right(long double arg, const char *str, int e, t_data *flag)
 		flag->written += ft_putstr(".");
 }
 
-void		output_double(long double arg, t_data *flag)
+void	output_double(long double arg, t_data *flag)
 {
-	char *str;
-	char error;
+	char	*str;
+	char	error;
 
 	error = FALSE;
 	str = NULL;
@@ -130,7 +135,12 @@ void		output_double(long double arg, t_data *flag)
 	else if (arg == -INFINITY)
 		str = ft_strdup("-inf");
 	if (str == NULL)
-		str = ft_ftoa(arg, (flag->precision == -1) ? 6 : flag->precision);
+	{
+		if (flag->precision == -1)
+			str = ft_ftoa(arg, 6);
+		else
+			str = ft_ftoa(arg, flag->precision);
+	}
 	else
 		error = TRUE;
 	if (flag->bit & FLAG_JUSTIFY_LEFT)
