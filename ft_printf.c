@@ -6,7 +6,7 @@
 /*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 18:54:29 by ngontjar          #+#    #+#             */
-/*   Updated: 2021/04/05 11:01:12 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/08 08:46:10 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	ft_printf(const char *format, ...)
 {
 	t_data	flag;
 
-	flag = (t_data){{{0}}, 0, 0, 0, 0, 0, 0, 0};
+	flag = (t_data){{{0}}, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	va_start(flag.ap, format);
 	while (*format)
 	{
@@ -92,7 +92,7 @@ int	ft_printf(const char *format, ...)
 			continue ;
 		}
 		write(1, format, 1);
-		++flag.written && *format && ++format;
+		++flag.written, *format && ++format;
 	}
 	va_end(flag.ap);
 	return (flag.written);

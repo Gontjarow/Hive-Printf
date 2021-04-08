@@ -6,7 +6,7 @@
 /*   By: ngontjar <ngontjar@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 21:42:32 by ngontjar          #+#    #+#             */
-/*   Updated: 2021/04/04 02:37:52 by ngontjar         ###   ########.fr       */
+/*   Updated: 2021/04/08 08:47:53 by ngontjar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static char	parse_width(const char **format, t_data *flag)
 			flag->bit |= FLAG_JUSTIFY_LEFT;
 			flag->width = -flag->width;
 		}
-		++(*format) && ++bytes;
+		++(*format), ++bytes;
 	}
 	else
 	{
@@ -33,7 +33,7 @@ static char	parse_width(const char **format, t_data *flag)
 		{
 			flag->width *= 10;
 			flag->width += (**format - '0');
-			++(*format) && ++bytes;
+			++(*format), ++bytes;
 		}
 	}
 	return (bytes);
@@ -49,7 +49,7 @@ static char	parse_precision(const char **format, t_data *flag)
 
 	if (**format != '.')
 		return (0);
-	++(*format) && (bytes = 1);
+	++(*format), (bytes = 1);
 	if (**format == '*' && ++(*format) && ++bytes)
 	{
 		flag->precision = va_arg(flag->ap, int);
@@ -64,7 +64,7 @@ static char	parse_precision(const char **format, t_data *flag)
 			flag->precision = ((flag->precision == -1) * (**format - '0'))
 				+ ((flag->precision != -1)
 					* ((flag->precision * 10) + (**format - '0')));
-			++(*format) && ++bytes;
+			++(*format), ++bytes;
 		}
 	}
 	if (flag->precision < -1)
@@ -80,7 +80,7 @@ static char	parse_specifier(const char **format, t_data *flag)
 	bytes = 0;
 	if (**format == 'h')
 	{
-		++(*format) && ++bytes;
+		++(*format), ++bytes;
 		if (**format == 'h' && ++(*format) && ++bytes)
 			flag->specifier = SPECIFIER_HH;
 		else
@@ -89,7 +89,7 @@ static char	parse_specifier(const char **format, t_data *flag)
 	else if ((**format == 'l' && *(*format + 1) != 'f')
 		|| (**format == 'L' && *(*format + 1) == 'f'))
 	{
-		++(*format) && ++bytes;
+		++(*format), ++bytes;
 		if (**format == 'l' && ++(*format) && ++bytes)
 			flag->specifier = SPECIFIER_LL;
 		else
@@ -97,7 +97,7 @@ static char	parse_specifier(const char **format, t_data *flag)
 	}
 	skip = (size_t)strany_skip(*format, "hlL");
 	skip -= (skip != 0) * (size_t)(*format);
-	(bytes += skip) && ((*format) += skip);
+	(bytes += skip), ((*format) += skip);
 	return (bytes);
 }
 
@@ -122,7 +122,7 @@ static char	parse_flags(const char **format, t_data *flag)
 			flag->bit |= FLAG_PREFIX;
 		if (**format == '0')
 			flag->bit |= FLAG_LEADING_ZERO;
-		++(*format) && ++bytes;
+		++(*format), ++bytes;
 	}
 	return (bytes);
 }
